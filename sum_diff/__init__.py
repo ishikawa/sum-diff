@@ -21,7 +21,7 @@ def git_current_branch() -> str:
 
 
 # Borrowed from https://stackoverflow.com/a/17843908
-def get_git_parent(current_branch: str) -> str | None:
+def git_parent_branch(current_branch: str) -> str | None:
     """
     Find the nearest parent of a Git branch and return its name.
     """
@@ -58,7 +58,17 @@ def get_git_parent(current_branch: str) -> str | None:
     return branch_name
 
 
+def git_diff_from_parent(parent_branch: str | None) -> str:
+    """
+    Get the diff of the current branch from its parent branch.
+    """
+    command = f"git diff {parent_branch}" if parent_branch else "git diff"
+    return subprocess.check_output(command, shell=True).decode("utf-8")
+
+
 @click.command()
 def main():
     current_branch = git_current_branch()
-    print(get_git_parent(current_branch))
+    parent_branch = git_parent_branch(current_branch)
+    diff = git_diff_from_parent(parent_branch)
+    print(diff)

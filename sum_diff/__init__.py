@@ -28,7 +28,15 @@ You will be provided with:
 
 and you need to explain them in a short and concise title ONLY.
 
-## Guidelines for clear and concise title:
+
+Follow these steps to generate an appropriate title:
+
+1. Read the "Brief description" and summarize it into a concise English sentence.
+2. Read the "Commit messages" to understand what has been changed.
+3. Read the "Diff" to understand how the changes were made.
+4. Based on steps 1-3, generate an appropriate title following the "Guidelines for clear and concise title."
+
+## Guidelines for clear and concise title
 
 ### Starting the title with uppercase and the first word being a verb in present tense.
 
@@ -95,7 +103,11 @@ def main():
                 "content": USER_PROMPT.format(logs=logs, diff=diff),
             },
         ],
-        temperature=0.0,
+        temperature=0.5,
     )
 
-    print(completion.choices[0].message.content)
+    title = completion.choices[0].message.content
+
+    if title:
+        title = title.strip()
+        print(title)

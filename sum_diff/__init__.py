@@ -22,19 +22,16 @@ You are a software engineer who has been asked to explain your changes.
 
 You will be provided with:
 
-1. Brief description of the changes (Most important)
-2. Commit messages
-3. Diff of the changes
+- Commit messages
+- Diff of the changes
 
-and you need to explain them in a short and concise title ONLY.
+and you need to explain them in a concise title and description.
 
+Follow these steps to generate an appropriate title and description:
 
-Follow these steps to generate an appropriate title:
-
-1. Read the "Brief description" and summarize it into a concise English sentence.
-2. Read the "Commit messages" to understand what has been changed.
-3. Read the "Diff" to understand how the changes were made.
-4. Based on steps 1-3, generate an appropriate title following the "Guidelines for clear and concise title."
+1. Read the _Commit messages_ to understand, in order, what changes have been made in this branch.
+2. Read the _Diff_ to understand how the changes were made. Extracting some key points to generate a title and description.
+3. Generate an appropriate title and description following the guidelines below.
 
 ## Guidelines for clear and concise title
 
@@ -54,6 +51,7 @@ calculate tax for Switzerland.
   concise, with more context.
 - BAD: A title like "Adding new tax parameters" or "Change tax logic" are overly generic and won't
   help reviewers.
+- BAD: "Changes for calculation" is too generic.
 - NOT GOOD: "TaxInternals structure update and CalculateEffectiveRate changes in case of Swiss
   country code" is too detailed and should be in the description, not the title.
 - NOT GOOD: "Change tax calculation for Swiss businesses in the TX bracket effective from 2019
@@ -63,15 +61,9 @@ calculate tax for Switzerland.
 
 - Don't surround title with quotes
 - Enclose programming language elements in backticks (e.g., `if`, `while`).
-
-So your brief description of the changes is:
 """
 
 USER_PROMPT = """
-## Brief description of the changes
-
-プロトタイプを実装した。
-
 ## Commit messages
 
 {logs}
@@ -94,16 +86,16 @@ def main():
     client = OpenAI(api_key=OPENAI_API_KEY)
 
     completion = client.chat.completions.create(
-        # model="gpt-4o",
-        model="gpt-3.5-turbo",
+        model="gpt-4o",
+        # model="gpt-3.5-turbo",
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": SYSTEM_PROMPT.format(logs=logs, diff=diff)},
             {
                 "role": "user",
                 "content": USER_PROMPT.format(logs=logs, diff=diff),
             },
         ],
-        temperature=0.5,
+        temperature=0.0,
     )
 
     title = completion.choices[0].message.content

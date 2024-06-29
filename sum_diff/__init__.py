@@ -62,7 +62,18 @@ def git_diff_from_parent(parent_branch: str | None) -> str:
     """
     Get the diff of the current branch from its parent branch.
     """
-    command = f"git diff {parent_branch}" if parent_branch else "git diff"
+    command = f"git diff {parent_branch}.." if parent_branch else "git diff"
+    return subprocess.check_output(command, shell=True).decode("utf-8")
+
+
+def git_logs_from_parent(parent_branch: str | None) -> str:
+    """
+    Get the diff of the current branch from its parent branch.
+    """
+    command = "git log --pretty=%B"
+    if parent_branch:
+        command += f" {parent_branch}.."
+
     return subprocess.check_output(command, shell=True).decode("utf-8")
 
 
@@ -71,4 +82,6 @@ def main():
     current_branch = git_current_branch()
     parent_branch = git_parent_branch(current_branch)
     diff = git_diff_from_parent(parent_branch)
+    logs = git_logs_from_parent(parent_branch)
     print(diff)
+    print(logs)

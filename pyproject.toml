@@ -7,7 +7,12 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.10"
+python-dotenv = "^1.0.1"
+click = "^8.1.7"
+openai = "^1.35.7"
 
+[tool.poetry.scripts]
+sum-diff = "sum_diff:main"
 
 [build-system]
 requires = ["poetry-core"]

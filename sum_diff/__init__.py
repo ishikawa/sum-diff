@@ -111,8 +111,8 @@ def main():
         temperature=0.0,
     )
 
-    title = completion.choices[0].message.content
+    message = completion.choices[0].message.content
 
-    if title:
-        title = title.strip()
-        print(title)
+    if message:
+        message = message.strip()
+        print(message)

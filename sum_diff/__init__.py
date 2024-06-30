@@ -2,7 +2,8 @@ import os
 import click
 
 from dotenv import load_dotenv
-from openai import OpenAI
+import anthropic
+
 
 from sum_diff.git import (
     git_current_branch,
@@ -13,12 +14,17 @@ from sum_diff.git import (
 
 load_dotenv(".env")
 
-OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
+ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 
+# Prompt library documentation
+# https://docs.anthropic.com/en/prompt-library/code-clarifier
+#
 # Pull request best practices
 # https://blog.pragmaticengineer.com/pull-request-or-diff-best-practices/
 SYSTEM_PROMPT = """
-You are a software engineer who has been asked to explain your changes.
+You are a software engineer who has been asked to explain code changes. Your task is to explain them
+in a concise title and description. The goal is to help the reviewer understand what the code does
+and why it was changed.
 
 You will be provided with:
 
@@ -26,7 +32,7 @@ You will be provided with:
 - Commit messages
 - Diff of the changes
 
-and you need to explain them in a concise title and description.
+and ou need to explain code changes in a concise title and description.
 
 Follow these steps to generate an appropriate title and description:
 
@@ -89,18 +95,17 @@ def main():
     # print(diff)
     # print(logs)
 
-    client = OpenAI(api_key=OPENAI_API_KEY)
+    client = anthropic.Anthropic(
+        # defaults to os.environ.get("ANTHROPIC_API_KEY")
+        api_key=ANTHROPIC_API_KEY,
+    )
 
-    completion = client.chat.completions.create(
-        model="gpt-4o",
-        # model="gpt-3.5-turbo",
+    message = client.messages.create(
+        model="claude-3-5-sonnet-20240620",
+        max_tokens=1024,
+        temperature=0,
+        system=SYSTEM_PROMPT.format(branch_name=current_branch, logs=logs, diff=diff),
         messages=[
-            {
-                "role": "system",
-                "content": SYSTEM_PROMPT.format(
-                    branch_name=current_branch, logs=logs, diff=diff
-                ),
-            },
             {
                 "role": "user",
                 "content": USER_PROMPT.format(
@@ -108,11 +113,8 @@ def main():
                 ),
             },
         ],
-        temperature=0.0,
     )
 
-    message = completion.choices[0].message.content
-
-    if message:
-        message = message.strip()
-        print(message)
+    for c in message.content:
+        if c.type == "text":
+            print(c.text)

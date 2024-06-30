@@ -86,8 +86,8 @@ def main():
     parent_branch = git_parent_branch(current_branch)
     diff = git_diff_from_parent(parent_branch)
     logs = git_logs_from_parent(parent_branch)
-    print(diff)
-    print(logs)
+    # print(diff)
+    # print(logs)
 
     client = OpenAI(api_key=OPENAI_API_KEY)
 

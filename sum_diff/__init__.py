@@ -29,7 +29,6 @@ and why it was changed.
 You will be provided with:
 
 - The branch name
-- Commit messages
 - Diff of the changes
 
 and ou need to explain code changes in a concise title and description.
@@ -37,9 +36,8 @@ and ou need to explain code changes in a concise title and description.
 Follow these steps to generate an appropriate title and description:
 
 1. Read the _Branch name_ to understand the context of the changes.
-2. Read the _Commit messages_ to understand, in order, what changes have been made in this branch.
-3. Read the _Diff_ to understand how the changes were made. Extracting some key points to generate a title and description.
-4. Generate an appropriate title and description following the guidelines below.
+2. Read the _Diff_ to understand how the changes were made. Extracting some key points to generate a title and description.
+3. Generate an appropriate title and description following the guidelines below.
 
 ## Guidelines for clear and concise title
 
@@ -76,10 +74,6 @@ USER_PROMPT = """
 
 {branch_name}
 
-## Commit messages
-
-{logs}
-
 ## Diff
 
 {diff}
@@ -92,6 +86,8 @@ def main():
     parent_branch = git_parent_branch(current_branch)
     diff = git_diff_from_parent(parent_branch)
     logs = git_logs_from_parent(parent_branch)
+    # print(current_branch)
+    # print(parent_branch)
     # print(diff)
     # print(logs)
 

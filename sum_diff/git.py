@@ -63,7 +63,7 @@ def git_logs_from_parent(parent_branch: str | None) -> str:
     """
     Get the diff of the current branch from its parent branch.
     """
-    command = "git log --pretty=%B"
+    command = "git log --name-only --oneline"
     if parent_branch:
         command += f" {parent_branch}.."
 

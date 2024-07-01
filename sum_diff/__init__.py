@@ -9,7 +9,6 @@ from sum_diff.git import (
     git_current_branch,
     git_parent_branch,
     git_diff_from_parent,
-    git_logs_from_parent,
 )
 
 load_dotenv(".env")
@@ -85,11 +84,9 @@ def main():
     current_branch = git_current_branch()
     parent_branch = git_parent_branch(current_branch)
     diff = git_diff_from_parent(parent_branch)
-    logs = git_logs_from_parent(parent_branch)
     # print(current_branch)
     # print(parent_branch)
     # print(diff)
-    # print(logs)
 
     client = anthropic.Anthropic(
         # defaults to os.environ.get("ANTHROPIC_API_KEY")
@@ -100,13 +97,11 @@ def main():
         model="claude-3-5-sonnet-20240620",
         max_tokens=1024,
         temperature=0,
-        system=SYSTEM_PROMPT.format(branch_name=current_branch, logs=logs, diff=diff),
+        system=SYSTEM_PROMPT.format(branch_name=current_branch, diff=diff),
         messages=[
             {
                 "role": "user",
-                "content": USER_PROMPT.format(
-                    branch_name=current_branch, logs=logs, diff=diff
-                ),
+                "content": USER_PROMPT.format(branch_name=current_branch, diff=diff),
             },
         ],
     )

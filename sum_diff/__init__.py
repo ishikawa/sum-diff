@@ -38,7 +38,7 @@ Now, here is the code diff:
 </code_diff>
 
 Analyze the branch name:
-1. Look for keywords or patterns that indicate the purpose of the changes (e.g., "feature", "bugfix", "hotfix", "refactor").
+1. Look for keywords or patterns that indicate the purpose of the changes (e.g., "work", "fix", "feature", "bugfix", "hotfix", "refactor").
 2. Identify any ticket or issue numbers if present.
 3. Note any specific components or areas of the codebase mentioned.
 
@@ -62,7 +62,7 @@ Composing the PR description:
 5. Include any necessary instructions for testing or deployment.
 6. Add any relevant links or references.
 
-Output your response in the following format:
+Output your response into your <response> in the following format:
 <pr_title>
 Your PR title here
 </pr_title>
@@ -100,11 +100,12 @@ def main():
                 "role": "user",
                 "content": USER_PROMPT.format(branch_name=current_branch, diff=diff),
             },
+            {"role": "assistant", "content": "<response><pr_title>"},
         ],
     )
 
     xml_text = "\n".join([m.text for m in message.content if m.type == "text"]).strip()
-    # print(xml_text)
+    print(xml_text)
 
     # Make text into xml
     xml_text = f"<root>\n{xml_text}\n</root>"

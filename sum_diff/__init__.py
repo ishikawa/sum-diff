@@ -108,7 +108,7 @@ def main():
     xml_text = "\n".join(
         ["<response><pr_title>"] + [m.text for m in message.content if m.type == "text"]
     ).strip()
-    print(xml_text)
+    # print(xml_text)
 
     try:
         # print("```")

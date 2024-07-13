@@ -21,61 +21,57 @@ ANTHROPIC_API_KEY = os.environ["ANTHROPIC_API_KEY"]
 # Pull request best practices
 # https://blog.pragmaticengineer.com/pull-request-or-diff-best-practices/
 SYSTEM_PROMPT = """
-You are a software engineer who has been asked to explain code changes. Your task is to explain them
-in a concise title and description. The goal is to help the reviewer understand what the code does
-and why it was changed.
-
-You will be provided with:
-
-- The branch name
-- Diff of the changes
-
-and ou need to explain code changes in a concise title and description.
-
-Follow these steps to generate an appropriate title and description:
-
-1. Read the _Branch name_ to understand the context of the changes.
-2. Read the _Diff_ to understand how the changes were made. Extracting some key points to generate a title and description.
-3. Generate an appropriate title and description following the guidelines below.
-
-## Guidelines for clear and concise title
-
-### Starting the title with uppercase and the first word being a verb in present tense.
-
-- GOOD: "Change Swiss tax calculation for new regulation"
-- NOT GOOD: "changed Swiss tax calculation for new regulation"
-- NOT GOOD: "Ability to calculate Swiss tax for new regulation"
-
-### Keep the title short, but expressive enough to signal what the reviewer can expect.
-
-Let's say you're working on an accounting software and there is a new business requirement on how to
-calculate tax for Switzerland.
-
-- GOOD: A title like "Changes for Swiss tax calculation" is concise.
-- GOOD: A title like "Change for tax calculation in Switzerland for new regulation" is still
-  concise, with more context.
-- BAD: A title like "Adding new tax parameters" or "Change tax logic" are overly generic and won't
-  help reviewers.
-- BAD: "Changes for calculation" is too generic.
-- NOT GOOD: "TaxInternals structure update and CalculateEffectiveRate changes in case of Swiss
-  country code" is too detailed and should be in the description, not the title.
-- NOT GOOD: "Change tax calculation for Swiss businesses in the TX bracket effective from 2019
-  following new regulations" is too verbose.
-
-## Output Format
-
-- Don't surround title with quotes
-- Enclose programming language elements in backticks (e.g., `if`, `while`).
+You are tasked with writing a Pull Request (PR) title and description based on a git branch name and
+a code diff. Follow these instructions carefully to complete the task.
 """
 
 USER_PROMPT = """
-## Branch name
+First, here is the git branch name:
+<branch_name>
+{{branch_name}}
+</branch_name>
 
-{branch_name}
+Now, here is the code diff:
+<code_diff>
+{{diff}}
+</code_diff>
 
-## Diff
+Analyze the branch name:
+1. Look for keywords or patterns that indicate the purpose of the changes (e.g., "feature", "bugfix", "hotfix", "refactor").
+2. Identify any ticket or issue numbers if present.
+3. Note any specific components or areas of the codebase mentioned.
 
-{diff}
+Review the code diff:
+1. Identify the files that have been modified, added, or deleted.
+2. Understand the main changes and their purpose.
+3. Look for any significant additions or removals of functionality.
+4. Note any changes to dependencies or configuration files.
+
+Writing the PR title:
+1. Keep it concise (50-70 characters if possible).
+2. Start with a capital letter and use present tense.
+3. Summarize the main purpose of the changes.
+4. Include the ticket or issue number if present in the branch name.
+
+Composing the PR description:
+1. Provide a brief overview of the changes (1-2 sentences).
+2. List the main components or areas affected.
+3. Explain the reason for the changes and their impact.
+4. Mention any important implementation details.
+5. Include any necessary instructions for testing or deployment.
+6. Add any relevant links or references.
+
+Output your response in the following format:
+<pr_title>
+Your PR title here
+</pr_title>
+
+<pr_description>
+Your PR description here
+</pr_description>
+
+Remember to base your PR title and description solely on the information provided in the branch name
+and code diff. Do not include any external information or assumptions beyond what is given.
 """
 
 

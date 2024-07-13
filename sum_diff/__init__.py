@@ -107,18 +107,22 @@ def main():
     # print(xml_text)
 
     # Make text into xml
-    xml_text = f"<root>{xml_text}</root>"
+    xml_text = f"<root>\n{xml_text}\n</root>"
 
-    # print("```")
-    # print(xml_text)
-    # print("```")
-    root = ET.fromstring(xml_text)
+    try:
+        # print("```")
+        # print(xml_text)
+        # print("```")
+        root = ET.fromstring(xml_text)
 
-    if (pr_title := root.find("pr_title")) is not None:
-        if text := pr_title.text:
-            print(text.strip())
-            print()
+        if (pr_title := root.find("pr_title")) is not None:
+            if text := pr_title.text:
+                print(text.strip())
+                print()
 
-    if (pr_description := root.find("pr_description")) is not None:
-        if text := pr_description.text:
-            print(text.strip())
+        if (pr_description := root.find("pr_description")) is not None:
+            if text := pr_description.text:
+                print(text.strip())
+    except ET.ParseError as e:
+        click.secho(f"Error parsing XML: {e}", fg="red")
+        click.secho(xml_text, fg="red")

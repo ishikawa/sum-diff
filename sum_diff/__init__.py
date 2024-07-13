@@ -1,5 +1,6 @@
 import os
 import click
+import xml.etree.ElementTree as ET
 
 from dotenv import load_dotenv
 import anthropic
@@ -102,6 +103,22 @@ def main():
         ],
     )
 
-    for c in message.content:
-        if c.type == "text":
-            print(c.text)
+    xml_text = "\n".join([m.text for m in message.content if m.type == "text"]).strip()
+
+    # Make text into xml
+    if not xml_text.startswith("<"):
+        xml_text = f"<root>{xml_text}</root>"
+
+    # print(current_branch)
+    # print(diff)
+
+    root = ET.fromstring(xml_text)
+
+    if (pr_title := root.find("pr_title")) is not None:
+        if text := pr_title.text:
+            print(text.strip())
+            print()
+
+    if (pr_description := root.find("pr_description")) is not None:
+        if text := pr_description.text:
+            print(text.strip())

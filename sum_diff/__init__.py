@@ -29,12 +29,12 @@ a code diff. Follow these instructions carefully to complete the task.
 USER_PROMPT = """
 First, here is the git branch name:
 <branch_name>
-{{branch_name}}
+{branch_name}
 </branch_name>
 
 Now, here is the code diff:
 <code_diff>
-{{diff}}
+{diff}
 </code_diff>
 
 Analyze the branch name:
@@ -104,14 +104,14 @@ def main():
     )
 
     xml_text = "\n".join([m.text for m in message.content if m.type == "text"]).strip()
+    # print(xml_text)
 
     # Make text into xml
-    if not xml_text.startswith("<"):
-        xml_text = f"<root>{xml_text}</root>"
+    xml_text = f"<root>{xml_text}</root>"
 
-    # print(current_branch)
-    # print(diff)
-
+    # print("```")
+    # print(xml_text)
+    # print("```")
     root = ET.fromstring(xml_text)
 
     if (pr_title := root.find("pr_title")) is not None:

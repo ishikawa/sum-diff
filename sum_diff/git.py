@@ -51,9 +51,32 @@ def git_parent_branch(current_branch: str) -> str | None:
     return branch_name
 
 
+MAX_DIFF_LENGTH = 3000
+
+
 def git_diff_from_parent(parent_branch: str | None) -> str:
     """
     Get the diff of the current branch from its parent branch.
     """
-    command = f"git diff {parent_branch}.." if parent_branch else "git diff"
-    return subprocess.check_output(command, shell=True).decode("utf-8")
+    # Collect files changed between the current branch and its parent.
+    command = "git diff --name-only"
+    if parent_branch:
+        command += f" {parent_branch}.."
+
+    r = subprocess.check_output(command, shell=True, text=True)
+    files = r.split("\n")
+
+    # Collect the diff of each file changed and concatenate them.
+    diff = ""
+    for file in files:
+        command = "git diff"
+        if parent_branch:
+            command += f" {parent_branch}.."
+        command += f" -- {file}"
+
+        r = subprocess.check_output(command, shell=True, text=True)
+        if len(r) > MAX_DIFF_LENGTH:
+            r = r[:MAX_DIFF_LENGTH]
+        diff += r
+
+    return diff

@@ -59,8 +59,7 @@ Composing the PR description:
 2. List the main components or areas affected.
 3. Explain the reason for the changes and their impact.
 4. Mention any important implementation details.
-5. Include any necessary instructions for testing or deployment.
-6. Add any relevant links or references.
+5. Add any relevant links or references.
 
 Output your response into your <response> in the following format:
 <pr_title>

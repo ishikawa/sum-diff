@@ -1,4 +1,5 @@
 import os
+import re
 import click
 import xml.etree.ElementTree as ET
 
@@ -103,12 +104,22 @@ def main():
         ],
     )
 
-    # Make text into xml
+    # --- Make text into xml
     xml_text = "\n".join(
         ["<response><pr_title>"] + [m.text for m in message.content if m.type == "text"]
     ).strip()
+
+    # escape special characters
+    xml_text = xml_text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+    # unescape tags
+    xml_text = re.sub(
+        r"&lt;(/?)(response|pr_title|pr_description|)&gt;", r"<\1\2>", xml_text
+    )
+
     # print(xml_text)
 
+    # --- Parse XML
     try:
         # print("```")
         # print(xml_text)

@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "sum-diff"
+version = "0.1.0"
+description = ""
+authors = ["Takanori Ishikawa <takanori.ishikawa@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+python-dotenv = "^1.0.1"
+click = "^8.1.7"
+anthropic = "^0.30.0"
+
+[tool.poetry.scripts]
+sum-diff = "sum_diff:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

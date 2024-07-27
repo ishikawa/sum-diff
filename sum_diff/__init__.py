@@ -28,6 +28,8 @@ a code diff. Follow these instructions carefully to complete the task.
 """
 
 USER_PROMPT = """
+## Input
+
 First, here is the git branch name:
 <branch_name>
 {branch_name}
@@ -38,31 +40,43 @@ Now, here is the code diff:
 {diff}
 </code_diff>
 
-Analyze the branch name:
-1. Look for keywords or patterns that indicate the purpose of the changes (e.g., "work", "fix", "feature", "bugfix", "hotfix", "refactor").
+## Analysis
+
+### Analyze the branch name:
+1. Look for keywords or patterns that indicate the purpose of the changes (e.g., "work", "fix",
+"feature", "bugfix", "hotfix", "refactor").
 2. Identify any ticket or issue numbers if present.
 3. Note any specific components or areas of the codebase mentioned.
 
-Review the code diff:
+### Review the code diff:
 1. Identify the files that have been modified, added, or deleted.
 2. Understand the main changes and their purpose.
 3. Look for any significant additions or removals of functionality.
 4. Note any changes to dependencies or configuration files.
 
-Writing the PR title:
+## Writing the PR title:
 1. Keep it concise (50-70 characters if possible).
 2. Start with a capital letter and use present tense.
 3. Summarize the main purpose of the changes.
 4. Include the ticket or issue number if present in the branch name.
+5. Use backticks (`) to enclose programming language keywords, identifiers, library class names, or
+constants that would benefit from being highlighted.
 
-Composing the PR description:
+## Composing the PR description:
 1. Provide a brief overview of the changes (1-2 sentences).
 2. List the main components or areas affected.
 3. Explain the reason for the changes and their impact.
 4. Mention any important implementation details.
 5. Add any relevant links or references.
+6. Use backticks (`) to enclose programming language keywords, identifiers, library class names, or
+constants that would benefit from being highlighted.
+7. When appropriate, include code examples using Markdown code blocks (```). Provide an explanation
+of the intent and content of the code example.
 
-Output your response into your <response> in the following format:
+## Output
+
+Format your response in the following way:
+
 <pr_title>
 Your PR title here
 </pr_title>
@@ -73,6 +87,43 @@ Your PR description here
 
 Remember to base your PR title and description solely on the information provided in the branch name
 and code diff. Do not include any external information or assumptions beyond what is given.
+
+## Example Output
+
+Here's an example of how your output might look:
+
+<pr_title>
+Add `UserAuthentication` class to improve login process (#123)
+</pr_title>
+
+<pr_description>
+This PR introduces a new `UserAuthentication` class to enhance the login process and improve overall
+security.
+
+Key changes:
+- Create `UserAuthentication` class in `auth/user_authentication.rb`
+- Implement password hashing using `bcrypt` gem
+- Update `User` model to utilize the new authentication class
+
+The `UserAuthentication` class encapsulates the login logic and password management, separating
+these concerns from the `User` model. This change improves code organization and makes it easier to
+maintain and extend authentication functionality in the future.
+
+Example usage of the new class:
+
+```ruby
+user_auth = UserAuthentication.new(user)
+if user_auth.authenticate(password)
+  # Proceed with login
+else
+  # Handle authentication failure
+end
+```
+
+This new implementation ensures that passwords are securely hashed and compared, reducing the risk of password-related vulnerabilities.
+
+Please review the changes and provide feedback on the new authentication flow.
+</pr_description>
 """
 
 

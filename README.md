@@ -2,38 +2,41 @@
 
 > Summarize your changes into a concise title and a detailed description.
 
-In this project, we provide a simple command called `sum-diff`. This command automatically generates a concise and clear title and a detailed description from the current branch's differences in a git repository.
+`sum-diff` is a simple command-line tool that automatically generates a concise title and a detailed description by analyzing the current git branch, including:
 
-## Install
+- Branch name
+- Code changes (`git diff`)
 
-Using `pipx`.
+## Installation
+
+Install using `pipx`:
 
 ```bash
-# download zip
+# Download and unzip
 $ unzip sum-diff.zip
-$ pipx ./sum-diff
+$ pipx install ./sum-diff
 
-# nightly from GitHub
-pipx install git+https://github.com/ishikawa/sum-diff
+# Install nightly from GitHub
+$ pipx install git+https://github.com/ishikawa/sum-diff
 ```
 
-## API key
+## API Key
 
-`sum-diff` uses Anthropic's Claude 3.5 Sonnet to generate output. You need to get API key from [their console](https://console.anthropic.com/) and exporting it via `ANTHROPIC_API_KEY` environment variable.
+`sum-diff` uses Anthropic's Claude 3.5 Sonnet to generate the output. Obtain an API key from [Anthropic's console](https://console.anthropic.com/) and set it as an environment variable:
 
 ```bash
 $ export ANTHROPIC_API_KEY=sk-ant-...
 ```
 
-## How to use
+## Usage
 
-After you made some changes in your project and before you're going to create a PR for these changes, run `sum-diff` command to let AI to write title and description of the PR.
+After making changes to your project and before creating a PR, run the `sum-diff` command to have the AI generate a title and description for your PR.
 
 ```bash
 $ sum-diff
 ```
 
-It takes some seconds, then, prints title and description in standard output. For example:
+The command will take a few seconds to process and then output the title and description. For example:
 
 ````
 Add `while` statement support to compiler

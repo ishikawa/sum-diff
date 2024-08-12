@@ -121,8 +121,6 @@ end
 ```
 
 This new implementation ensures that passwords are securely hashed and compared, reducing the risk of password-related vulnerabilities.
-
-Please review the changes and provide feedback on the new authentication flow.
 </pr_description>
 """
 

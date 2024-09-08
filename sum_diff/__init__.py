@@ -130,14 +130,14 @@ def main(lang):
     # Construct the user prompt
     user_prompt = USER_PROMPT.format(
         branch_name=current_branch, diff=diff, lang=output_lang
-    )
+    ).strip()
 
-    for example in examples:
-        user_prompt += "\n\n## Example Output\n\n"
+    for i, example in enumerate(examples):
+        user_prompt += f"\n\n## Example Output ({i+1})\n\n"
         user_prompt += f"<pr_title>\n{example.title}\n</pr_title>\n\n"
         user_prompt += f"<pr_description>\n{example.description}\n</pr_description>"
 
-    print(user_prompt)
+    # print(user_prompt)
 
     client = anthropic.Anthropic(
         # defaults to os.environ.get("ANTHROPIC_API_KEY")

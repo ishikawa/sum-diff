@@ -1,4 +1,5 @@
 import os
+from os import path
 import re
 import click
 import xml.etree.ElementTree as ET
@@ -12,6 +13,7 @@ from sum_diff.git import (
     git_parent_branch,
     git_diff_from_parent,
 )
+from sum_diff.utils import parse_pr_example
 
 load_dotenv(".env")
 
@@ -91,41 +93,6 @@ and code diff. Do not include any external information or assumptions beyond wha
 **IMPORTANT**:
 
 - Output should be in {lang}.
-
-## Example Output
-
-Here's an example of how your output might look:
-
-<pr_title>
-Add `UserAuthentication` class to improve login process (#123)
-</pr_title>
-
-<pr_description>
-This PR introduces a new `UserAuthentication` class to enhance the login process and improve overall
-security.
-
-Key changes:
-- Create `UserAuthentication` class in `auth/user_authentication.rb`
-- Implement password hashing using `bcrypt` gem
-- Update `User` model to utilize the new authentication class
-
-The `UserAuthentication` class encapsulates the login logic and password management, separating
-these concerns from the `User` model. This change improves code organization and makes it easier to
-maintain and extend authentication functionality in the future.
-
-Example usage of the new class:
-
-```ruby
-user_auth = UserAuthentication.new(user)
-if user_auth.authenticate(password)
-  # Proceed with login
-else
-  # Handle authentication failure
-end
-```
-
-This new implementation ensures that passwords are securely hashed and compared, reducing the risk of password-related vulnerabilities.
-</pr_description>
 """
 
 
@@ -139,6 +106,9 @@ This new implementation ensures that passwords are securely hashed and compared,
     help="Choose the language for the output.",
 )
 def main(lang):
+    output_lang = "Japanese" if lang == "ja" else "English"
+
+    # Git operations
     current_branch = git_current_branch()
     parent_branch = git_parent_branch(current_branch)
     diff = git_diff_from_parent(parent_branch)
@@ -146,12 +116,34 @@ def main(lang):
     # print(parent_branch)
     # print(diff)
 
+    # Read example outputs for few shots learning from the directory "examples/"
+    examples_dir = path.join(path.dirname(__file__), "examples")
+    examples = []
+
+    for filename in os.listdir(examples_dir):
+        if filename.endswith(".md"):
+            with open(path.join(examples_dir, filename)) as f:
+                examples.append(parse_pr_example(f.read()))
+
+    # print(examples)
+
+    # Construct the user prompt
+    user_prompt = USER_PROMPT.format(
+        branch_name=current_branch, diff=diff, lang=output_lang
+    )
+
+    for example in examples:
+        user_prompt += "\n\n## Example Output\n\n"
+        user_prompt += f"<pr_title>\n{example.title}\n</pr_title>\n\n"
+        user_prompt += f"<pr_description>\n{example.description}\n</pr_description>"
+
+    print(user_prompt)
+
     client = anthropic.Anthropic(
         # defaults to os.environ.get("ANTHROPIC_API_KEY")
         api_key=ANTHROPIC_API_KEY,
     )
 
-    output_lang = "Japanese" if lang == "ja" else "English"
     message = client.messages.create(
         model="claude-3-5-sonnet-20240620",
         max_tokens=1024,

@@ -3,12 +3,12 @@ import re
 
 
 @dataclass
-class PRExample:
+class PrExample:
     title: str
     description: str
 
 
-def parse_pr_example(markdown: str) -> PRExample:
+def parse_pr_example(markdown: str) -> PrExample:
     """
     Parses a PR example from a Markdown-formatted string.
 
@@ -37,4 +37,4 @@ def parse_pr_example(markdown: str) -> PRExample:
     title = re.sub(r"^#+\s*", "", title)
 
     # Remove leading and trailing whitespace from the title and description
-    return PRExample(title.strip(), description.strip())
+    return PrExample(title.strip(), description.strip())

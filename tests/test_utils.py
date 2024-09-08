@@ -1,5 +1,5 @@
 import pytest
-from sum_diff.utils import parse_pr_example, PRExample
+from sum_diff.utils import parse_pr_example, PrExample
 
 
 @pytest.mark.parametrize(
@@ -13,7 +13,7 @@ from sum_diff.utils import parse_pr_example, PRExample
 
 This section contains the description.
 """,
-            PRExample(
+            PrExample(
                 title="Title", description="This section contains the description."
             ),
         ),
@@ -27,7 +27,7 @@ This section contains the description.
 
 This section contains the description.
 """,
-            PRExample(
+            PrExample(
                 title="Title", description="This section contains the description."
             ),
         ),
@@ -44,7 +44,7 @@ This section contains the description.
 
 This section contains the description.
 """,
-            PRExample(
+            PrExample(
                 title="Title", description="This section contains the description."
             ),
         ),
@@ -60,7 +60,7 @@ This section contains the description.
 This section contains the additional information.
 
 """,
-            PRExample(
+            PrExample(
                 title="Title",
                 description="""This section contains the description.
 
@@ -71,5 +71,5 @@ This section contains the additional information.""",
         ),
     ],
 )
-def test_parse_pr_example(markdown: str, expected: PRExample) -> None:
+def test_parse_pr_example(markdown: str, expected: PrExample) -> None:
     assert parse_pr_example(markdown) == expected

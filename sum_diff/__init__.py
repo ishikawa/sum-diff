@@ -88,6 +88,10 @@ Your PR description here
 Remember to base your PR title and description solely on the information provided in the branch name
 and code diff. Do not include any external information or assumptions beyond what is given.
 
+**IMPORTANT**:
+
+- Output should be in {lang}.
+
 ## Example Output
 
 Here's an example of how your output might look:
@@ -147,6 +151,7 @@ def main(lang):
         api_key=ANTHROPIC_API_KEY,
     )
 
+    output_lang = "Japanese" if lang == "ja" else "English"
     message = client.messages.create(
         model="claude-3-5-sonnet-20240620",
         max_tokens=1024,
@@ -155,7 +160,9 @@ def main(lang):
         messages=[
             {
                 "role": "user",
-                "content": USER_PROMPT.format(branch_name=current_branch, diff=diff),
+                "content": USER_PROMPT.format(
+                    branch_name=current_branch, diff=diff, lang=output_lang
+                ),
             },
             {"role": "assistant", "content": "<response><pr_title>"},
         ],

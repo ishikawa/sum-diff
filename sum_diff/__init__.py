@@ -126,7 +126,15 @@ This new implementation ensures that passwords are securely hashed and compared,
 
 
 @click.command()
-def main():
+# 言語を選択するオプション。デフォルトは英語であり、日本語を選択することもできる。
+@click.option(
+    "--lang",
+    "-l",
+    type=click.Choice(["en", "ja"], case_sensitive=False),
+    default="en",
+    help="Choose the language for the output.",
+)
+def main(lang):
     current_branch = git_current_branch()
     parent_branch = git_parent_branch(current_branch)
     diff = git_diff_from_parent(parent_branch)

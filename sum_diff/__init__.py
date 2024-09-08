@@ -88,6 +88,10 @@ Your PR description here
 Remember to base your PR title and description solely on the information provided in the branch name
 and code diff. Do not include any external information or assumptions beyond what is given.
 
+**IMPORTANT**:
+
+- Output should be in {lang}.
+
 ## Example Output
 
 Here's an example of how your output might look:
@@ -126,7 +130,15 @@ This new implementation ensures that passwords are securely hashed and compared,
 
 
 @click.command()
-def main():
+# 言語を選択するオプション。デフォルトは英語であり、日本語を選択することもできる。
+@click.option(
+    "--lang",
+    "-l",
+    type=click.Choice(["en", "ja"], case_sensitive=False),
+    default="en",
+    help="Choose the language for the output.",
+)
+def main(lang):
     current_branch = git_current_branch()
     parent_branch = git_parent_branch(current_branch)
     diff = git_diff_from_parent(parent_branch)
@@ -139,6 +151,7 @@ def main():
         api_key=ANTHROPIC_API_KEY,
     )
 
+    output_lang = "Japanese" if lang == "ja" else "English"
     message = client.messages.create(
         model="claude-3-5-sonnet-20240620",
         max_tokens=1024,
@@ -147,7 +160,9 @@ def main():
         messages=[
             {
                 "role": "user",
-                "content": USER_PROMPT.format(branch_name=current_branch, diff=diff),
+                "content": USER_PROMPT.format(
+                    branch_name=current_branch, diff=diff, lang=output_lang
+                ),
             },
             {"role": "assistant", "content": "<response><pr_title>"},
         ],

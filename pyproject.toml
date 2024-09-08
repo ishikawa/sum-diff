@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sum-diff"
-version = "0.1.0"
+version = "0.2.0"
 description = ""
 authors = ["Takanori Ishikawa <takanori.ishikawa@gmail.com>"]
 readme = "README.md"

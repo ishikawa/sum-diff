@@ -19,8 +19,19 @@ def parse_pr_example(markdown: str) -> PRExample:
     # Remove html comments
     markdown = re.sub(r"<!--.*?-->", "", markdown, flags=re.DOTALL)
 
-    # Split the title and description
-    title, description = re.split(r"\n+", markdown.strip(), maxsplit=1)
+    # Split the title and description.
+    #
+    # The title is the first line which starts with `# `
+    # The description is everything after the title
+    title = ""
+    lines: list[str] = []
+    for line in markdown.splitlines():
+        if line.startswith("# ") and not title:
+            title = line
+        else:
+            lines.append(line)
+
+    description = "\n".join(lines)
 
     # Remove leading `#` from the title
     title = re.sub(r"^#+\s*", "", title)

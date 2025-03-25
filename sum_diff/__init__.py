@@ -8,7 +8,7 @@ import anthropic
 import click
 from dotenv import load_dotenv
 
-from sum_diff.git import git_current_branch, git_diff_from_parent, git_parent_branch
+from sum_diff.git import git_base_branch, git_current_branch, git_diff_from_parent
 from sum_diff.logger import logger
 from sum_diff.utils import parse_pr_example
 
@@ -103,9 +103,17 @@ and code diff. Do not include any external information or assumptions beyond wha
     help="Choose the language for the output.",
 )
 @click.option(
+    "--base",
+    "-b",
+    "base_branch",
+    type=str,
+    default=None,
+    help="Specify the base branch to compare against.",
+)
+@click.option(
     "-v", "--verbose", is_flag=True, default=False, help="Enable verbose logging."
 )
-def main(lang, verbose=False):
+def main(lang, base_branch, verbose=False):
     if verbose:
         logger.setLevel(logging.DEBUG)
     else:
@@ -115,11 +123,14 @@ def main(lang, verbose=False):
 
     # Git operations
     current_branch = git_current_branch()
-    parent_branch = git_parent_branch(current_branch)
-    diff = git_diff_from_parent(parent_branch)
+
+    if base_branch is None:
+        base_branch = git_base_branch(current_branch)
+
+    diff = git_diff_from_parent(base_branch)
 
     logger.debug(f"Current branch: {current_branch}")
-    logger.debug(f"Parent branch: {parent_branch}")
+    logger.debug(f"Base branch: {base_branch}")
     logger.debug(f"Diff: {diff}")
 
     # Read example outputs for few shots learning from the directory "examples/"

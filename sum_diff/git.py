@@ -14,7 +14,7 @@ def git_current_branch() -> str:
 
 
 # Borrowed from https://stackoverflow.com/a/17843908
-def git_parent_branch(current_branch: str) -> str | None:
+def git_base_branch(current_branch: str) -> str | None:
     """
     Find the nearest parent of a Git branch and return its name.
     """

@@ -8,7 +8,7 @@ import anthropic
 import click
 from dotenv import load_dotenv
 
-from sum_diff.git import git_current_branch, git_diff_from_parent, git_parent_branch
+from sum_diff.git import git_base_branch, git_current_branch, git_diff_from_parent
 from sum_diff.logger import logger
 from sum_diff.utils import parse_pr_example
 
@@ -115,11 +115,11 @@ def main(lang, verbose=False):
 
     # Git operations
     current_branch = git_current_branch()
-    parent_branch = git_parent_branch(current_branch)
-    diff = git_diff_from_parent(parent_branch)
+    base_branch = git_base_branch(current_branch)
+    diff = git_diff_from_parent(base_branch)
 
     logger.debug(f"Current branch: {current_branch}")
-    logger.debug(f"Parent branch: {parent_branch}")
+    logger.debug(f"Parent branch: {base_branch}")
     logger.debug(f"Diff: {diff}")
 
     # Read example outputs for few shots learning from the directory "examples/"

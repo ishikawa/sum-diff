@@ -103,9 +103,17 @@ and code diff. Do not include any external information or assumptions beyond wha
     help="Choose the language for the output.",
 )
 @click.option(
+    "--base",
+    "-b",
+    "base_branch",
+    type=str,
+    default=None,
+    help="Specify the base branch to compare against.",
+)
+@click.option(
     "-v", "--verbose", is_flag=True, default=False, help="Enable verbose logging."
 )
-def main(lang, verbose=False):
+def main(lang, base_branch, verbose=False):
     if verbose:
         logger.setLevel(logging.DEBUG)
     else:
@@ -115,11 +123,14 @@ def main(lang, verbose=False):
 
     # Git operations
     current_branch = git_current_branch()
-    base_branch = git_base_branch(current_branch)
+
+    if base_branch is None:
+        base_branch = git_base_branch(current_branch)
+
     diff = git_diff_from_parent(base_branch)
 
     logger.debug(f"Current branch: {current_branch}")
-    logger.debug(f"Parent branch: {base_branch}")
+    logger.debug(f"Base branch: {base_branch}")
     logger.debug(f"Diff: {diff}")
 
     # Read example outputs for few shots learning from the directory "examples/"
